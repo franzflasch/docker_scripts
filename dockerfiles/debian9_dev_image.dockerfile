@@ -1,5 +1,5 @@
 # Build with:
-# docker build --build-arg USER_NAME=$USER --build-arg UID=$(id -u) --build-arg GID=$(id -g) -t <docker_image_tag> -f debian9_dev_image.dockerfile .
+# docker build --build-arg USER_NAME=$USER --build-arg UID=$(id -u) --build-arg GID=$(id -g) -t <docker_image_tag> -f <this_file_name> .
 
 FROM debian:9
 
@@ -33,4 +33,3 @@ export DEFAULT_USER=`whoami`\n\
 source $THEME\n\
 fi\n'\
 >> $HOME/.bashrc
-

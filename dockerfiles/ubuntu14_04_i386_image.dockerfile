@@ -1,5 +1,5 @@
 # Build with:
-# docker build --build-arg USER_NAME=$USER --build-arg UID=$(id -u) --build-arg GID=$(id -g) -t <docker_image_tag> -f debian9_dev_image.dockerfile .
+# docker build --build-arg USER_NAME=$USER --build-arg UID=$(id -u) --build-arg GID=$(id -g) -t <docker_image_tag> -f <this_file_name> .
 
 FROM i386/ubuntu:14.04
 
@@ -23,4 +23,3 @@ RUN useradd -m -u $UID -g $GID -o -s /bin/bash $USER_NAME -p '*'
 RUN usermod -aG sudo $USER_NAME
 RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 USER $USER_NAME
-
