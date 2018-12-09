@@ -14,7 +14,8 @@ print_usage() {
    echo "-i       docker image to take"
    echo "-o       optional docker arguments e.g. \"-v<some-dir>:<some-dir>\""
    echo "-r       auto remove docker container after exit"
-   echo "--ssh    map SSH agent socket into container, so that host ssh-keys can be used within docker container"
+   echo "--ssh    map SSH agent socket into container, so that host ssh-keys can be used within docker container,"
+   echo "         this needs a running ssh-agent to work - start with [ eval \"\$(ssh-agent -s)\" ]"
    exit 1
 }
 
