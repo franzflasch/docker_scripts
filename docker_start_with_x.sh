@@ -5,7 +5,7 @@ set -e
 print_usage() {
    echo "usage: $0 <docker_image> <username> <host_shared_dir> <docker_shared_dir> <optional_docker_args>"
    echo "example call:"
-   echo "./docker_start_with_x.sh -i ubuntu18_04_3dprinting:1 -u franz -o \"-v /home/franz/:/working_dir --device /dev/ttyUSB0\""
+   echo "./docker_start_with_x.sh -i ubuntu18_04_3dprinting:1 -u <username> -o \"-v /home/<username>/:/working_dir --device /dev/ttyUSB0\""
    echo "use this as optional_docker_arf to enable support for tun/tap devices in docker:"
    echo "--cap-add=NET_ADMIN --device /dev/net/tun"
    echo ""
