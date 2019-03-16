@@ -21,3 +21,7 @@ ssh -X <remote_server>
 ```
 
 3. You should now be able to run X apps from the docker container and they will be displayed on the client which is connected via ssh.  
+
+Resources:  
+http://wangkejie.me/2018/01/08/remote-gui-app-in-docker/  
+https://blog.yadutaf.fr/2017/09/10/running-a-graphical-app-in-a-docker-container-on-a-remote-server/  
