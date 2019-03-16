@@ -12,7 +12,7 @@ Some personal docker scripts I use in my daily life
 ssh -X <remote_server>  
 ```
 
-2. start the docker container with: 
+2. start the docker container with:  
     --net=host (shares network with host),  
     --hostname $(hostname) (sets docker hostname same as the host)  
     -v /home/$USER/.Xauthority:/home/$USER/.Xauthority  (maps .Xauthority into docker container, which is also needed)  
