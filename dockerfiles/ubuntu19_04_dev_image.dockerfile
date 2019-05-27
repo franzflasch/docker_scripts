@@ -1,7 +1,7 @@
 # Build with:
 # docker build --build-arg USER_NAME=$USER --build-arg UID=$(id -u) --build-arg GID=$(id -g) -t <docker_image_tag> -f <this_file_name> .
 
-FROM ubuntu:18.04
+FROM ubuntu:19.04
 
 ARG USER_NAME=testuser
 ARG UID=1000
