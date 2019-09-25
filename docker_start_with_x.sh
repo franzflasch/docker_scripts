@@ -48,6 +48,10 @@ do
       --ssh)
       ssh_auth_sock_file=$(dirname $SSH_AUTH_SOCK)/$(basename $SSH_AUTH_SOCK)
       DOCKER_SSH_AUTH_SOCK_OPTS="-v $ssh_auth_sock_file:$ssh_auth_sock_file -e SSH_AUTH_SOCK=$SSH_AUTH_SOCK"
+      shift
+      ;;
+      --ssh_mount)
+      DOCKER_SSH_AUTH_SOCK_OPTS="-v ${HOME}/.ssh:/home/${DOCKER_USER}/.ssh:ro"
       shift # past argument
       ;;
       -h|--help)
