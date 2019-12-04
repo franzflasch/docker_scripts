@@ -94,7 +94,7 @@ docker run -ti $REMOVE_FLAG\
            --device /dev/dri \
            --group-add $(getent group audio | cut -d: -f3) \
            --device /dev/snd \
-           -v /run/user/$(id -u)/pulse:/run/user/$(id -u)/pulse \
+           -v /run/user/$(id -u)/:/run/user/$(id -u)/ \
            -v /run/dbus/:/run/dbus/ \
            -v /dev/shm:/dev/shm \
            $DOCKER_SSH_AUTH_SOCK_OPTS \
