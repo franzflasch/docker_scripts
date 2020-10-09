@@ -24,7 +24,7 @@ ssh -X <remote_server>
 
 ## Notes: 
 ### Sound via ALSA
-Sound via alsa should work if you specify the ALSA CART environment variable (here Generic):
+Sound via alsa should work if you specify the ALSA_CARD environment variable (here Generic):
 ```console
 ALSA_CARD=Generic speaker-test
 ```
