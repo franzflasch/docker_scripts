@@ -14,7 +14,7 @@ ARG GID=1000
 RUN apt update 
 RUN apt install -y sudo
 RUN apt install -y dbus-x11
-RUN apt install -y build-essential cmake git fish
+RUN apt install -y build-essential cmake git wget
 RUN apt install -y locales \
     && sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen \
     && dpkg-reconfigure --frontend=noninteractive locales \
@@ -26,25 +26,10 @@ RUN usermod -aG sudo $USER_NAME
 RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 USER $USER_NAME
 
+# Install oh-my-bash with agnoster theme
 RUN cd $HOME && git clone https://github.com/powerline/fonts.git fonts && cd fonts && ./install.sh && rm -rf $HOME/fonts
-
-# Install bash agnoster theme
-RUN cd $HOME && mkdir -p .bash/themes/agnoster-bash && git clone https://github.com/franzflasch/agnoster-bash.git .bash/themes/agnoster-bash
-RUN echo 'export THEME=$HOME/.bash/themes/agnoster-bash/agnoster.bash\n\
-if [[ -f $THEME ]]; then\n\
-export DEFAULT_USER=`whoami`\n\
-source $THEME\n\
-fi\n'\
->> $HOME/.bashrc
-
-# Install fish shell with agnoster theme
-RUN cd $HOME && git clone https://github.com/oh-my-fish/oh-my-fish
-RUN cd $HOME/oh-my-fish
-RUN cd $HOME && fish oh-my-fish/bin/install --offline --noninteractive --yes
-RUN fish -c "omf update"
-RUN fish -c "omf install agnoster"
-RUN mkdir -p $HOME/.config/fish
-RUN echo "set -g theme_display_user yes" > $HOME/.config/fish/config.fish
-RUN echo "set -g theme_hide_hostname no" >> $HOME/.config/fish/config.fish
-RUN echo "set -g fish_prompt_pwd_dir_length 1" >> $HOME/.config/fish/config.fish
+RUN bash -c "$(wget https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh -O -)"
+RUN sed -i 's/^OSH_THEME/#&/' /home/$USER_NAME/.bashrc
+RUN sed -i '1iDEFAULT_USER="non-existing-user"' /home/$USER_NAME/.bashrc
+RUN sed -i '1iOSH_THEME="agnoster"' /home/$USER_NAME/.bashrc
 
