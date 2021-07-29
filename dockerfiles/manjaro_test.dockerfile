@@ -10,8 +10,9 @@ ARG USER_NAME=testuser
 ARG UID=1000
 ARG GID=1000
 
-RUN pacman -Syu --noconfirm sudo git fish base-devel trizen
+RUN pacman -Syu --noconfirm sudo git fish base-devel trizen wget
 
+RUN userdel builder
 RUN groupadd -g $GID -o $USER_NAME
 RUN useradd -m -u $UID -g $GID -o -s /bin/bash $USER_NAME -p '*'
 RUN groupadd sudo
@@ -19,14 +20,10 @@ RUN usermod -aG sudo $USER_NAME
 RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 USER $USER_NAME
 
+# Install oh-my-bash with agnoster theme
 RUN cd $HOME && git clone https://github.com/powerline/fonts.git fonts && cd fonts && ./install.sh && rm -rf $HOME/fonts
-
-# Install bash agnoster theme
-RUN cd $HOME && mkdir -p .bash/themes/agnoster-bash && git clone https://github.com/franzflasch/agnoster-bash.git .bash/themes/agnoster-bash
-RUN echo 'export THEME=$HOME/.bash/themes/agnoster-bash/agnoster.bash\n\
-if [[ -f $THEME ]]; then\n\
-export DEFAULT_USER=`whoami`\n\
-source $THEME\n\
-fi\n'\
->> $HOME/.bashrc
+RUN bash -c "$(wget https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh -O -)"
+RUN sed -i 's/^OSH_THEME/#&/' /home/$USER_NAME/.bashrc
+RUN sed -i '1iDEFAULT_USER="non-existing-user"' /home/$USER_NAME/.bashrc
+RUN sed -i '1iOSH_THEME="agnoster"' /home/$USER_NAME/.bashrc
 
