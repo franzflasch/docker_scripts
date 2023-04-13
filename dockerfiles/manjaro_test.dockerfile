@@ -10,7 +10,7 @@ ARG USER_NAME=testuser
 ARG UID=1000
 ARG GID=1000
 
-RUN pacman -Syu --noconfirm sudo git fish base-devel trizen wget
+RUN pacman -Syu --noconfirm sudo git fish base-devel wget
 
 RUN userdel builder
 RUN groupadd -g $GID -o $USER_NAME
