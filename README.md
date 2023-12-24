@@ -36,6 +36,30 @@ ALSA_CARD=Generic apulse retroarch
 
 However when using ALSA only one application can use the audio device at a time, otherwise it reports an error "Device busy".
 
+### Mount devices into an already running container
+Note: I think this only works when the container was started with "--privileged"
+
+Example with blackmagic debug probe: (/dev/ttyACM0 and /dev/ttyACM1)
+1. Start the container with the device unplugged
+2. When container is started plug the device
+3. Check that the devices ttyACM0 and ttyACM1 were created, they do not appear in the container
+4. check the device nodes on the host with:
+    ```console
+    ls -la /dev/ttyACM*
+    ```
+
+    output will be something like:
+    ```console
+    crw-rw----+ 1 root dialout 166, 0 Dec 24 08:31 /dev/ttyACM0
+    crw-rw----+ 1 root dialout 166, 1 Dec 24 08:31 /dev/ttyACM1
+    ```
+5. Create the device in the container using mknod accordingly
+    ```console
+    sudo mknod /dev/ttyACM0 c 166 0
+    sudo mknod /dev/ttyACM1 c 166 1
+    ```
+
+Devices should now be usable within the container.
 
 Resources:  
 http://wangkejie.me/2018/01/08/remote-gui-app-in-docker/  
