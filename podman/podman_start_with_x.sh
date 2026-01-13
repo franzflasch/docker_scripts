@@ -122,6 +122,7 @@ fi
 
 set +e
 podman run --name ${cid} -it $REMOVE_FLAG\
+           --userns=keep-id \
            --user=$PODMAN_USER \
            -e DISPLAY=$DISPLAY \
            -v /tmp/.X11-unix:/tmp/.X11-unix \
