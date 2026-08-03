@@ -22,7 +22,7 @@ print_usage() {
    exit 1
 }
 
-# Generate container name manually as we need it for pulse audio
+# Generate a random container name
 cid=$(shuf -i1-1000000 -n1 | sha256sum | awk '{print $1}' | cut -c1-8)
 
 # Parse commandline parameters
@@ -61,10 +61,9 @@ do
       shift # past argument
       ;;
       --pulse_audio)
-      PODMAN_PULSE_AUDIO_OPTS="-e PULSE_SERVER=unix:/tmp/pulseaudio.socket \
-	                       -e PULSE_COOKIE=/tmp/pulseaudio.cookie \
-	                       -v /tmp/podman-${cid}/pulseaudio.socket:/tmp/pulseaudio.socket \
-	                       -v /tmp/podman-${cid}/pulseaudio.client.conf:/etc/pulse/client.conf"
+      PODMAN_PULSE_AUDIO_OPTS="-e PULSE_SERVER=unix:/run/user/$(id -u)/pulse/native \
+                               -v ${HOME}/.config/pulse/cookie:/tmp/pulse-cookie:ro \
+                               -e PULSE_COOKIE=/tmp/pulse-cookie"
       shift
       ;;
       --rootless)
@@ -90,22 +89,6 @@ echo OPT_PODMAN_ARGS  = "${OPT_PODMAN_ARGS}"
 echo REMOVE_FLAG      = "${REMOVE_FLAG}"
 echo PODMAN_SSH_OPTS  = "${PODMAN_SSH_OPTS}"
 echo ROOTLESS_MODE    = "${ROOTLESS_MODE}"
-
-if [ ! -z "$PODMAN_PULSE_AUDIO_OPTS" ]
-then
-	mkdir -p /tmp/podman-${cid}
-
-cat << EOF > /tmp/podman-${cid}/pulseaudio.client.conf
-default-server = unix:/tmp/pulseaudio.socket
-# Prevent a server running in the container
-autospawn = no
-daemon-binary = /bin/true
-# Prevent the use of shared memory
-enable-shm = false
-EOF
-
-	pactl_id=$(pactl load-module module-native-protocol-unix socket=/tmp/podman-${cid}/pulseaudio.socket)
-fi
 
 ## Graphical SECTION
 # -e DISPLAY=$DISPLAY \
@@ -140,8 +123,3 @@ podman run --name ${cid} -it $REMOVE_FLAG\
 set -e
 
 
-if [ ! -z "$PODMAN_PULSE_AUDIO_OPTS" ]
-then
-	pactl unload-module ${pactl_id}
-	rm -rf /tmp/podman-${cid}
-fi
